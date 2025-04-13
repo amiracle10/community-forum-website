@@ -1,0 +1,13 @@
+{% extends 'components/base.html' %}
+{% load static %}
+
+{% block title %}
+{{ category }} - Community Forum
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1>Welcome to the {{ category }} Forum</h1>
+  <p>Here you can discuss everything related to {{ category }}.</p>
+</div>
+{% endblock %}

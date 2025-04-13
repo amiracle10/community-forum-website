@@ -1,0 +1,151 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
+body{
+  background-color: #272729;
+}
+ body h1,h3,p{
+  color:#fff;
+ }
+
+ #navbar.navbar.navbar-expand-md {
+  background-color: #1A1A1B !important;
+  color: #fff !important;
+}
+#navbar .nav-link,
+#navbar .navbar-brand {
+  color: #fff !important;
+}
+
+nav#navbar ul.navbar-nav li.nav-item a.nav-link:hover {
+  color: rgb(44, 62, 80) !important;
+}
+
+nav#navbar ul.navbar-nav li.nav-item a.nav-link {
+  transition: color 0.3s ease;
+}
+
+nav#navbar form {
+  position: relative;
+  transition: all 0.5s ease;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  box-sizing: border-box;
+  border-radius: 25px;
+  border: 4px solid white;
+  padding: 5px;
+  margin-left: auto;
+  overflow: hidden;
+}
+
+nav#navbar form input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  outline: 0;
+  border: 0;
+  font-size: 1em;
+  border-radius: 20px;
+  padding: 0 20px;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+nav#navbar form .fa {
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: none;
+  color: #272729;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 1s;
+  padding: 0;
+  box-sizing: content-box;
+}
+
+nav#navbar form:hover {
+  width: 300px;
+  cursor: pointer;
+}
+
+nav#navbar form:hover input {
+  width: 100%;
+  opacity: 1;
+}
+
+nav#navbar form:hover .fa {
+  background: #272729;
+  color: #fff;
+}
+
+
+  
+.card-body{
+  background-color: rgb(44, 62, 80);
+  color: #fff;
+}
+
+.sidebar-menu{
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 260px;
+  height: 100vh;
+  background-color: #1A1A1B;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.user-conected, .last-post-div {
+  height: 50%;
+  color: #fff;
+}
+
+.last-post-section{
+  height: 75%;
+}
+
+.last-post-menu{
+  border-top: 2px solid 	#272729 ;
+}
+.last-post-menu h4{
+  margin-top: 15px;
+}
+
+.modal-content {
+  background-color: #272729;
+  color: white;
+}
+
+.btn-close {
+  background: none;
+  color: #fff;
+  font-size: 1.5rem;
+  opacity: 1;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border: none;
+}
+#title,#body{
+  width: 100%;
+}
+#category{
+  background-color: #272729;
+  color: #fff;
+  border-radius: 15px;
+  border: 1px solid rgb(44, 62, 80);
+}
+#category:focus{
+  border: 1px solid rgb(44, 62, 80);
+  outline: none;
+}
