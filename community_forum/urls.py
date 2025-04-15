@@ -26,5 +26,8 @@ urlpatterns = [
     path('events/', views.events_board, name= 'events'),
     path('topics/', views.topics_board, name= 'topics'),
     path('about/', views.about_board, name= 'about'),
+    path('logout/', views.user_logout, name='logout'),
+    path('login/', views.user_login, name='login'),
+
 
 ]

@@ -34,6 +34,27 @@
               <a class="nav-link" href="../about">About</a>
             </li>
           </ul>
+          <div class="d-flex align-items-center gap-2 ms-4">
+            {% if user.is_authenticated %}
+              <span class="nav-link mb-0">{{ user.username }}</span>
+          
+              <div class="dropdown">
+                <a href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  <i class="user-logo fa-solid fa-circle-user logged-in-icon" style="cursor: pointer;"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end custom-user-dropdown">
+                  <li>
+                    <a href="{% url 'logout' %}" class="dropdown-item text-center">Logout</a>
+                  </li>
+                </ul>
+              </div>
+            {% else %}
+              <a href="{% url 'login' %}" class="nav-link d-flex align-items-center gap-2">
+                Login
+              </a>
+            {% endif %}
+          </div>
+                   
         </div>
       </div>
     </nav>
@@ -43,9 +64,19 @@
         {% endblock %}
       </main>
       <div class="sidebar-menu p-3">
-        <div class="user-conected mb-4">
+        <<div class="user-conected mb-4" style="overflow-y: auto;">
           <h4>Online Users</h4>
-          <p>zsdfbSDBSDb</p>
+          {% if online_users %}
+          <ul class="list-unstyled">
+            {% for user in online_users %}
+              <li class="d-flex align-items-center gap-2 text-white mb-1">
+                <span class="online-dot"></span> {{ user.username }}
+              </li>
+            {% endfor %}
+          </ul>          
+          {% else %}
+            <p class="text-muted">No users online</p>
+          {% endif %}
         </div>
         <div class="last-post-div">
           <div class="last-post-section mb-4">
