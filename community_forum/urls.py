@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from website_community_forum import views
+from website_community_forum.views import create_post, post_detail, delete_post
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,6 +30,7 @@ urlpatterns = [
     path('about/', views.about_board, name= 'about'),
     path('logout/', views.user_logout, name='logout'),
     path('login/', views.user_login, name='login'),
-
-
+    path('api/posts/', create_post, name='create_post'),
+    path('post/<int:post_id>/', post_detail, name='post_detail'),
+    path('post/<int:post_id>/delete/', delete_post, name='delete_post'),
 ]

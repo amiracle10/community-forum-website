@@ -1,8 +1,13 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.cache import cache
 from django.utils.timezone import now, timedelta
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse, HttpResponseForbidden
+import json
+from .models import Post
 
 
 # Create your views here.
@@ -11,7 +16,13 @@ def index(request):
     return render(request, 'index.html', {'online_users': online_users})
 
 def forum_category(request, category):
-    return render(request, 'forum_category.html', {'category': category})
+    posts = Post.objects.filter(category=category).order_by('-created_at')
+    online_users = get_online_users()
+    return render(request, 'forum_category.html', {
+        'category': category,
+        'posts': posts,
+        'online_users': online_users,
+    })
 
 
 def discussion_board(request):
@@ -62,13 +73,15 @@ def user_login(request):
 
 #function to logout
 def user_logout(request):
-    logout(request)
+    if request.user.is_authenticated:
+        cache.delete(f'seen_{request.user.id}')
+        logout(request)
     return redirect('index')
 
 #fucntionto get active user to the side menu
 def get_online_users():
     users = User.objects.all()
-    active_users = []
+    active_users = [] #empty array(online users)
 
     for user in users:
         last_seen = cache.get(f'seen_{user.id}')
@@ -76,3 +89,45 @@ def get_online_users():
             active_users.append(user)
 
     return active_users
+
+
+#create post using modal(js)
+@csrf_exempt
+def create_post(request):
+    if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return JsonResponse({'error': 'Unauthorized'}, status=401)
+
+        data = json.loads(request.body)
+        category = data.get('category')
+        title = data.get('title')
+        body = data.get('body')
+
+        if not all([category, title, body]):
+            return JsonResponse({'error': 'All fields are required'}, status=400)
+
+        post = Post.objects.create(
+            category=category,
+            title=title,
+            body=body,
+            author=request.user
+        )
+
+        return JsonResponse({'message': 'Post created', 'post_id': post.id}, status=201)
+
+    return JsonResponse({'error': 'Invalid request'}, status=405)
+
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    return render(request, 'post_detail.html', {'post': post})
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user != post.author:
+        return HttpResponseForbidden()
+
+    if request.method == 'POST':
+        post.delete()
+        return redirect('forum_category', category=post.category)
