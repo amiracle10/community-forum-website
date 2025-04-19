@@ -8,12 +8,19 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
 import json
 from .models import Post
+from django.utils.timezone import now
+from django.http import HttpResponse
 
 
 # Create your views here.
 def index(request):
     online_users = get_online_users()
-    return render(request, 'index.html', {'online_users': online_users})
+    recent_posts = Post.objects.order_by('-created_at')[:5]
+    return render(request, 'index.html', {
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    })
+
 
 def forum_category(request, category):
     posts = Post.objects.filter(category=category).order_by('-created_at')
@@ -131,3 +138,9 @@ def delete_post(request, post_id):
     if request.method == 'POST':
         post.delete()
         return redirect('forum_category', category=post.category)
+    
+
+def simulate_online_users(request):
+    for user in User.objects.all():
+        cache.set(f'seen_{user.id}', now())
+    return HttpResponse("ready!.")

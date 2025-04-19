@@ -2,6 +2,7 @@
 
 body{
   background-color: #272729;
+  overscroll-behavior-y: none;
 }
  body h1,h3,p{
   color:#fff;
@@ -138,6 +139,7 @@ nav#navbar form:hover .fa {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 .online-dot {
@@ -154,15 +156,50 @@ nav#navbar form:hover .fa {
   color: #fff;
 }
 
+.user-conected {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #2c3e50 #1a1a1b;
+  overscroll-behavior: contain;
+  position: relative;
+}
+
+
+
+.user-conected::-webkit-scrollbar {
+  width: 6px;
+}
+
+.user-conected::-webkit-scrollbar-track {
+  background: #2c3e50;
+  border-radius: 10px;
+}
+
+.user-conected::-webkit-scrollbar-thumb {
+  background-color: #2c3e50;
+  border-radius: 10px;
+  border: 1px solid #1a1a1b;
+}
+
+.user-conected h4 {
+  position: sticky;
+  top: 0;
+  background-color: #1a1a1b;
+  padding: 10px 0;
+  z-index: 1;
+}
+
+
 .last-post-section{
   height: 75%;
 }
 
-.last-post-menu{
-  border-top: 2px solid 	#272729 ;
-}
 .last-post-menu h4{
   margin-top: 15px;
+}
+.last-post-div li {
+  margin: 0;
+  padding: 0.25rem 0;
 }
 
 .modal-content {
