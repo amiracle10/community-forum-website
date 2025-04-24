@@ -34,5 +34,6 @@ urlpatterns = [
     path('post/<int:post_id>/', post_detail, name='post_detail'),
     path('post/<int:post_id>/delete/', delete_post, name='delete_post'),
     path('simulate-online/', views.simulate_online_users),
+    path('register/', views.register, name='register'),
 
 ]

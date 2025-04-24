@@ -11,7 +11,7 @@
       <h4 class="mb-2">{{ post.title }}</h4>
       <p class="mb-1">
         <strong>{{ post.author }}</strong> • 
-        <small class="text-light">{{ post.created_at|date:"M d, Y - H:i" }}</small>
+        <small class="text-light">{{ post.created_at|date:"M d, Y - g:i A" }}</small>
       </p>
       <p class="mb-2">{{ post.body|truncatewords:40 }}</p>
       <div class="d-flex justify-content-between align-items-center">

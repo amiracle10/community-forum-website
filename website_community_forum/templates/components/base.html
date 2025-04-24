@@ -12,11 +12,14 @@
   </head>
 
   <body class="d-flex flex-column min-vh-100">
-    <nav id="navbar" class="navbar navbar-expand-md fixed-top">
+    <nav id="navbar" class="navbar navbar-expand-xxl fixed-top">
       <div class="container-xxl">
         <a href="/" class="navbar-brand">Community Forum</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>        
         <div class="collapse navbar-collapse justify-content-end align-center" id="main-nav">
-          <form action="">
+          <form action=""  class="d-none d-xlg-block">
             <input type="search" placeholder="Search here ...">
             <i class="fa fa-search"></i>
           </form>
@@ -33,8 +36,43 @@
             <li class="nav-item">
               <a class="nav-link" href="../about">About</a>
             </li>
+            <li class="nav-item d-xxl-none">
+              <a class="nav-link" data-bs-toggle="collapse" href="#mobileOnlineUsers" role="button" aria-expanded="false" aria-controls="mobileOnlineUsers">
+                Online Users
+              </a>
+            </li>
           </ul>
-          <div class="d-flex align-items-center gap-2 ms-4">
+          <div class="collapse d-xxl-none" id="mobileOnlineUsers">
+            <div class="card card-body bg-dark text-white border-0">
+              {% if online_users %}
+                <ul class="list-unstyled mb-0">
+                  {% for user in online_users %}
+                    <li class="d-flex align-items-center gap-2 mb-1">
+                      <span class="online-dot"></span> {{ user.username }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted mb-0">No users online</p>
+              {% endif %}
+            </div>
+          </div>          
+          <div class="collapse d-md-none" id="mobileOnlineUsers">
+            <div class="card card-body bg-dark text-white border-0">
+              {% if online_users %}
+                <ul class="list-unstyled mb-0">
+                  {% for user in online_users %}
+                    <li class="d-flex align-items-center gap-2 mb-1">
+                      <span class="online-dot"></span> {{ user.username }}
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% else %}
+                <p class="text-muted mb-0">No users online</p>
+              {% endif %}
+            </div>
+          </div>          
+          <div class="d-flex align-items-center gap-2 ms-0 ms-xxl-4">
             {% if user.is_authenticated %}
               <span class="nav-link mb-0">{{ user.username }}</span>         
               <div class="dropdown">
@@ -61,7 +99,7 @@
         {% block content %}
         {% endblock %}
       </main>
-      <div class="sidebar-menu p-3 d-flex flex-column" style="height: 100%; overflow: hidden;">
+      <div class="sidebar-menu p-3 d-none d-xxl-flex flex-column" style="height: 100%; overflow: hidden;">
         <div class="user-conected mb-4">
           <h4>Online Users</h4>
           {% if online_users %}

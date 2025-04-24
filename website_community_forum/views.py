@@ -10,6 +10,7 @@ import json
 from .models import Post
 from django.utils.timezone import now
 from django.http import HttpResponse
+from .forms import RegisterForm
 
 
 # Create your views here.
@@ -25,28 +26,54 @@ def index(request):
 def forum_category(request, category):
     posts = Post.objects.filter(category=category).order_by('-created_at')
     online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
     return render(request, 'forum_category.html', {
         'category': category,
         'posts': posts,
         'online_users': online_users,
+        'recent_posts': recent_posts
     })
 
 
 def discussion_board(request):
-
-    return render(request,'discussions.html' )
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
+    return render(request,'discussions.html',{
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    
+    } )
 
 def about_board(request):
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
 
-    return render(request, 'about.html')
+    return render(request, 'about.html'
+                  ,{
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    
+    })
 
 def topics_board(request):
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
 
-    return render(request, 'topics.html')
+    return render(request, 'topics.html' ,{
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    
+    })
 
 def events_board(request):
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
 
-    return render(request, 'events.html')
+    return render(request, 'events.html',{
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    
+    })
 
 
 #function to login
@@ -77,15 +104,24 @@ def user_login(request):
         'remember_checked': False
     })
 
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = RegisterForm()
+    return render(request, 'register.html', {'form': form})
 
-#function to logout
+                 
 def user_logout(request):
     if request.user.is_authenticated:
         cache.delete(f'seen_{request.user.id}')
         logout(request)
     return redirect('index')
 
-#fucntionto get active user to the side menu
+#fucntion to get active user to the side menu
 def get_online_users():
     users = User.objects.all()
     active_users = [] #empty array(online users)
@@ -127,7 +163,15 @@ def create_post(request):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'post_detail.html', {'post': post})
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
+
+    return render(request, 'post_detail.html', {
+        'post': post,
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    
+    })
 
 @login_required
 def delete_post(request, post_id):
