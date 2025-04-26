@@ -7,10 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponseForbidden
 import json
-from .models import Post
+from .models import Post, Reply
 from django.utils.timezone import now
 from django.http import HttpResponse
 from .forms import RegisterForm
+from django.utils import timezone
+from django.db.models import Q
 
 
 # Create your views here.
@@ -38,9 +40,11 @@ def forum_category(request, category):
 def discussion_board(request):
     online_users = get_online_users()
     recent_posts = Post.objects.order_by('-created_at')[:5]
+    all_posts = Post.objects.all().order_by('-created_at')
     return render(request,'discussions.html',{
         'online_users': online_users,
-        'recent_posts': recent_posts
+        'recent_posts': recent_posts,
+        'all_posts': all_posts
     
     } )
 
@@ -175,6 +179,8 @@ def post_detail(request, post_id):
 
 @login_required
 def delete_post(request, post_id):
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
     post = get_object_or_404(Post, id=post_id)
     if request.user != post.author:
         return HttpResponseForbidden()
@@ -182,9 +188,74 @@ def delete_post(request, post_id):
     if request.method == 'POST':
         post.delete()
         return redirect('forum_category', category=post.category)
-    
 
-def simulate_online_users(request):
-    for user in User.objects.all():
-        cache.set(f'seen_{user.id}', now())
-    return HttpResponse("ready!.")
+
+
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
+
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        parent_id = request.POST.get('parent_id')
+        parent_reply = Reply.objects.filter(id=parent_id).first() if parent_id else None
+
+        Reply.objects.create(
+            user=request.user,
+            post=post,
+            content=content,
+            parent=parent_reply
+        )
+        return redirect('post_detail', post_id=post.id)
+
+    all_replies = Reply.objects.filter(post=post).select_related('user', 'parent').order_by('created_at')
+
+    reply_map = {}
+    top_level_replies = []
+
+    for reply in all_replies:
+        reply.temp_children = []
+        reply_map[reply.id] = reply
+        if reply.parent_id is None:
+            top_level_replies.append(reply)
+
+    for reply in all_replies:
+        if reply.parent_id:
+            parent = reply_map.get(reply.parent_id)
+            if parent:
+                parent.temp_children.append(reply)
+
+    return render(request, 'post_detail.html', {
+        'post': post,
+        'replies': top_level_replies,
+        'online_users': online_users,
+        'recent_posts': recent_posts
+    })
+
+
+def delete_reply(request, reply_id):
+    reply = get_object_or_404(Reply, id=reply_id)
+    if request.user != reply.user:
+        return HttpResponseForbidden()
+
+    if request.method == 'POST':
+        post_id = reply.post.id
+        reply.delete()
+        return redirect('post_detail', post_id=post_id)
+    
+def search_posts(request):
+    query = request.GET.get('q')
+    if not query:
+        return redirect('index')
+    posts = Post.objects.filter(Q(title__icontains=query)).order_by('-created_at') if query else []
+
+    online_users = get_online_users()
+    recent_posts = Post.objects.order_by('-created_at')[:5]
+
+    return render(request, 'search_results.html', {
+        'query': query,
+        'posts': posts,
+        'online_users': online_users,
+        'recent_posts': recent_posts,
+    })

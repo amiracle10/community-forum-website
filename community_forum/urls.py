@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from website_community_forum import views
-from website_community_forum.views import create_post, post_detail, delete_post
+from website_community_forum.views import create_post, post_detail, delete_post,search_posts
 
 
 urlpatterns = [
@@ -33,7 +33,9 @@ urlpatterns = [
     path('api/posts/', create_post, name='create_post'),
     path('post/<int:post_id>/', post_detail, name='post_detail'),
     path('post/<int:post_id>/delete/', delete_post, name='delete_post'),
-    path('simulate-online/', views.simulate_online_users),
     path('register/', views.register, name='register'),
+    path('reply/<int:reply_id>/delete/', views.delete_reply, name='delete_reply'),
+    path('search/', views.search_posts, name='search'),
+
 
 ]
