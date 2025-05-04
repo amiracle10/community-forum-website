@@ -23,4 +23,17 @@
     <p class="text-muted">No discussions found in this forum.</p>
   {% endfor %}
 </div>
+
+{% if user.is_authenticated and category %}
+  <div class="position-fixed" style="bottom: 3.5rem; right: 3.5rem; z-index: 1050;">
+    <button class="btn btn-success rounded-circle shadow" 
+            data-bs-toggle="modal" data-bs-target="#createForumPostModal"
+            title="Create Discussion" style="width: 52px; height: 52px;">
+      <i class="fa fa-plus fa-lg"></i>
+    </button>
+  </div>
+{% endif %}
+
+{% include "components/ModalCreateFromForum.html" %}
+
 {% endblock %}
