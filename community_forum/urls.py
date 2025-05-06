@@ -19,8 +19,7 @@ from django.urls import path
 from website_community_forum import views
 from website_community_forum.views import (
     index, forum_category, discussion_board, event_list,
-    topics_board, about_board, user_logout, user_login, register,
-    create_post, post_create, post_detail, delete_post,
+    topics_board, about_board, user_logout, user_login, register, post_detail, delete_post,
     delete_reply, search_posts,
     create_event, review_events, approve_event, deny_event
 )
