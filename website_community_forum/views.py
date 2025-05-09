@@ -257,7 +257,7 @@ def report_user(request, reported_user_id):
             report.reporter = request.user
             report.reported_user = reported_user
             report.save()
-            
+            messages.success(request, 'Your report was submitted successfully. Thank you!')
             return redirect('index')
         else:
             messages.error(request, 'There was an error submitting the report.')
