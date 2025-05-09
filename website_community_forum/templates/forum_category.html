@@ -12,7 +12,7 @@
       <p class="mb-1">
         <strong>{{ post.author }}</strong> • 
         {% if user.is_authenticated %}
-            <a href="{% url 'report_user' reported_user_id=post.author.id %}">Report User</a>
+            <a href="{% url 'report_user' reported_user_id=post.author.id %}">Report</a> •
         {% else %}
             
         {% endif %}

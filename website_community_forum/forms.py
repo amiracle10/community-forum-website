@@ -29,3 +29,12 @@ class ReportUserForm(forms.ModelForm):
     class Meta:
         model = UserReport
         fields = ['reason', 'description']
+
+    def __init__(self, *args, **kwargs):
+        super(ReportUserForm, self).__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            existing_classes = field.widget.attrs.get('class', '')
+            field.widget.attrs['class'] = f'{existing_classes} form-control'.strip()
+
+    
+    
