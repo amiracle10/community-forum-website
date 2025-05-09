@@ -12,6 +12,8 @@ import json
 
 from .models import Post, Reply, Category, Event
 from .forms import RegisterForm
+from django.contrib import messages
+from .forms import ReportUserForm
 
 
 def get_common_context():
@@ -242,3 +244,23 @@ def event_list(request):
     context = get_common_context()
     context['events'] = Event.objects.filter(approved=True).order_by('event_date', 'start_time')
     return render(request, 'events.html', context)
+
+
+@login_required
+def report_user(request, reported_user_id):
+    reported_user = User.objects.get(id=reported_user_id)
+
+    if request.method == 'POST':
+        form = ReportUserForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.reporter = request.user
+            report.reported_user = reported_user
+            report.save()
+            
+            return redirect('index')
+        else:
+            messages.error(request, 'There was an error submitting the report.')
+    else:
+      form = ReportUserForm
+    return render(request, 'report_user.html', {'form': form, 'reported_user': reported_user})

@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Event
+from .models import UserReport
 
 class RegisterForm(UserCreationForm):
     class Meta:
@@ -23,3 +24,8 @@ class EventForm(forms.ModelForm):
             'start_time': forms.TimeInput(attrs={'type': 'time'}),
             'end_time': forms.TimeInput(attrs={'type': 'time'}),
         }
+
+class ReportUserForm(forms.ModelForm):
+    class Meta:
+        model = UserReport
+        fields = ['reason', 'description']

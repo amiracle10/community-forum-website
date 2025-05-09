@@ -46,4 +46,5 @@ urlpatterns = [
     path('events/review/', review_events, name='review_events'),
     path('events/approve/<int:event_id>/', approve_event, name='approve_event'),
     path('events/deny/<int:event_id>/', deny_event, name='deny_event'),
+    path('report_user/<int:reported_user_id>/', views.report_user, name='report_user'),
 ]

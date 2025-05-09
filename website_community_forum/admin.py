@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Post, Category, Reply, Event
+from .models import UserReport
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
@@ -27,3 +28,9 @@ class EventAdmin(admin.ModelAdmin):
     @admin.action(description="Approve selected events")
     def approve_selected(self, request, queryset):
         queryset.update(approved=True)
+
+class UserReportAdmin(admin.ModelAdmin):
+    list_display = ('reporter', 'reported_user', 'reason', 'created_at')
+    list_filter = ('created_at', 'reporter', 'reported_user')
+
+admin.site.register(UserReport)
