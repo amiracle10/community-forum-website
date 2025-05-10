@@ -6,6 +6,14 @@
 <div class="container py-5 d-flex flex-column align-items-center">
   <h2 class="text-white mb-4 text-center">{{ category }} Discussions</h2>
 
+
+  {% if user.is_authenticated and category %}
+    <div class="text-center my-4">
+      <a href="#" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createForumPostModal">Create Discussion</a>
+
+    </div>
+  {% endif %}
+
   {% for post in posts %}
     <div class="card reddit-card mb-4 p-3" style="width: 100%; max-width: 720px;">
       <h4 class="mb-2">{{ post.title }}</h4>
@@ -20,7 +28,7 @@
       </p>
       <p class="mb-2">{{ post.body|truncatewords:40 }}</p>
       <div class="d-flex justify-content-between align-items-center">
-        <span class="badge bg-primary">{{ post.category }}</span>
+        <span class="badge bg-light text-dark">{{ post.category }}</span>
         <a href="{% url 'post_detail' post.id %}" class="btn btn-sm btn-outline-light">View</a>
       </div>
     </div>
@@ -28,16 +36,6 @@
     <p class="text-muted">No discussions found in this forum.</p>
   {% endfor %}
 </div>
-
-{% if user.is_authenticated and category %}
-  <div class="position-fixed" style="bottom: 3.5rem; right: 3.5rem; z-index: 1050;">
-    <button class="btn btn-success rounded-circle shadow" 
-            data-bs-toggle="modal" data-bs-target="#createForumPostModal"
-            title="Create Discussion" style="width: 52px; height: 52px;">
-      <i class="fa fa-plus fa-lg"></i>
-    </button>
-  </div>
-{% endif %}
 
 {% include "components/ModalCreateFromForum.html" %}
 
