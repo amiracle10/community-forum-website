@@ -25,6 +25,9 @@ def get_common_context():
 def index(request):
     context = get_common_context()
     context['categories'] = Category.objects.all()
+    popular_posts = Post.objects.annotate(comment_count=Count('replies')).order_by('-comment_count')[:3] 
+    
+    context['popular_posts'] = popular_posts
     return render(request, 'index.html', context)
 
 def forum_category(request, category_slug):

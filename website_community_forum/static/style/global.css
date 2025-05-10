@@ -143,6 +143,45 @@ nav#navbar form:hover .fa {
   color: #fff;
 }
 
+.btn-pink {
+  background-color: #dd9dbb;
+  color: white;
+  border: none;
+}
+
+.btn-pink:hover {
+  background-color: #916279;
+}
+
+.btn-purple {
+  background-color: #694486;
+  color: white;
+  border: none;
+}
+
+.btn-purple:hover {
+  background-color: #2d1d3d;
+}
+.btn-blue {
+  background-color: #025992;
+  color: white;
+  border: none;
+}
+
+.btn-blue:hover {
+  background-color: #003f64;
+}
+
+.btn-olive {
+  background-color: #658576;
+  color: white;
+  border: none;
+}
+
+.btn-olive:hover {
+  background-color: #42574d;
+}
+
 .sidebar-menu{
   position: fixed;
   top: 50px;
@@ -253,4 +292,8 @@ nav#navbar form:hover .fa {
   border-radius: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   color: white;
+}
+
+.footer {
+  background-color: #1A1A1B;
 }
